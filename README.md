@@ -11,7 +11,7 @@ This project demonstrates a Spring Boot application connected to an **Oracle Dat
 
 ### 1. Configure Application Properties
 
-Create a folder and file:
+Create a folder and file under this path:
 
 ```
 src/main/resources/application.properties
@@ -40,7 +40,7 @@ spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
 
 ### 2. Create Oracle User
 
-Login to your Oracle DB as `SYSDBA` and run:
+Login to your Oracle sql developer  and run:
 
 ```sql
 CREATE USER C##spring IDENTIFIED BY spring;
