@@ -1,5 +1,6 @@
 package com.example.demo.mapper;
 
+import com.example.demo.DTO.LiabilitiesCreationDto;
 import com.example.demo.DTO.LiabilitiesDto;
 import com.example.demo.entity.Liabilities;
 
@@ -10,10 +11,22 @@ public class LiabilitiesMapper {
 
         liabilities.setLiabilityId(dto.getLiabilityId());
         liabilities.setCustomerId(dto.getCustomerId());
-        liabilities.setStartDate(dto.getStartDate());
-        liabilities.setInterestRate(dto.getInterestRate());
-        liabilities.setDepositPrincipalAmount(dto.getDepositPrincipalAmount());
+        liabilities.setLiabilityType(dto.getLiabilityType());
+        liabilities.setLiabilityValue(dto.getLiabilityValue());
+        liabilities.setAnnualInterestRate(dto.getAnnualInterestRate());
+        liabilities.setInterestPayBackDate(dto.getInterestPayBackDate());
+        liabilities.setMaturityDate(dto.getMaturityDate());
+        return liabilities;
+    }
 
+    public static Liabilities toLiabilities(LiabilitiesCreationDto dto) {
+        Liabilities liabilities = new Liabilities();
+
+        liabilities.setCustomerId(dto.getCustomerId());
+        liabilities.setLiabilityType(dto.getLiabilityType());
+        liabilities.setAnnualInterestRate(dto.getAnnualInterestRate());
+        liabilities.setInterestPayBackDate(dto.getInterestPayBackDate());
+        liabilities.setMaturityDate(dto.getMaturityDate());
         return liabilities;
     }
 
@@ -22,9 +35,11 @@ public class LiabilitiesMapper {
 
         liabilitiesDto.setLiabilityId(liabilities.getLiabilityId());
         liabilitiesDto.setCustomerId(liabilities.getCustomerId());
-        liabilitiesDto.setStartDate(liabilities.getStartDate());
-        liabilitiesDto.setInterestRate(liabilities.getInterestRate());
-        liabilitiesDto.setDepositPrincipalAmount(liabilities.getDepositPrincipalAmount());
+        liabilitiesDto.setLiabilityType(liabilities.getLiabilityType().toString());
+        liabilitiesDto.setLiabilityValue(liabilities.getLiabilityValue());
+        liabilitiesDto.setAnnualInterestRate(liabilities.getAnnualInterestRate());
+        liabilitiesDto.setInterestPayBackDate(liabilities.getInterestPayBackDate());
+        liabilitiesDto.setMaturityDate(liabilities.getMaturityDate());
         return liabilitiesDto;
     }
 }

@@ -1,24 +1,14 @@
-package com.example.demo.entity;
+package com.example.demo.DTO;
 
-import jakarta.persistence.*;
 
-@Entity
-@Table(name = "Customer")
-public class Customer {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class CustomerCreationDto {
+    @JsonProperty("name")
     private String name;
+    @JsonProperty("email")
     private String email;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;
@@ -36,3 +26,4 @@ public class Customer {
         this.email = email;
     }
 }
+

@@ -4,29 +4,17 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.time.LocalDate;
 
-public class LiabilitiesDto {
-    @JsonProperty("liabilityId")
-    private int liabilityId;
+public class LiabilitiesCreationDto {
     @JsonProperty("customerId")
     private int customerId;
     @JsonProperty("liabilityType")
     private String liabilityType;
-    @JsonProperty("liabilityValue")
-    private double liabilityValue;
     @JsonProperty("annualInterestRate")
     private double annualInterestRate;
     @JsonProperty("interestPayBackDate")
     private LocalDate interestPayBackDate;
     @JsonProperty("maturityDate")
     private LocalDate maturityDate;
-
-    public int getLiabilityId() {
-        return liabilityId;
-    }
-
-    public void setLiabilityId(int liabilityId) {
-        this.liabilityId = liabilityId;
-    }
 
     public int getCustomerId() {
         return customerId;
@@ -42,14 +30,6 @@ public class LiabilitiesDto {
 
     public void setLiabilityType(String liabilityType) {
         this.liabilityType = liabilityType;
-    }
-
-    public double getLiabilityValue() {
-        return liabilityValue;
-    }
-
-    public void setLiabilityValue(double liabilityValue) {
-        this.liabilityValue = liabilityValue;
     }
 
     public double getAnnualInterestRate() {
