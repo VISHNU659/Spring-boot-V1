@@ -13,8 +13,6 @@ public class LiabilitiesCreationDto {
     private double annualInterestRate;
     @JsonProperty("interestPayBackDate")
     private LocalDate interestPayBackDate;
-    @JsonProperty("maturityDate")
-    private LocalDate maturityDate;
 
     public int getCustomerId() {
         return customerId;
@@ -46,13 +44,5 @@ public class LiabilitiesCreationDto {
 
     public void setInterestPayBackDate(LocalDate interestPayBackDate) {
         this.interestPayBackDate = interestPayBackDate;
-    }
-
-    public LocalDate getMaturityDate() {
-        return maturityDate;
-    }
-
-    public void setMaturityDate(LocalDate maturityDate) {
-        this.maturityDate = maturityDate;
     }
 }

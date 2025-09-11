@@ -14,11 +14,20 @@ public class Liabilities {
     private int customerId;
     @Enumerated(EnumType.STRING)
     private LiabilityType liabilityType;
-    private double LiabilityValue;
+    private double liabilityValue;
     private double annualInterestRate;
     private LocalDate interestPayBackDate;
+    private LocalDate creationDate;
     @Column(nullable = true)
     private LocalDate maturityDate;
+
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
 
     public LiabilityType getLiabilityType() {
         return liabilityType;
@@ -29,11 +38,11 @@ public class Liabilities {
     }
 
     public double getLiabilityValue() {
-        return LiabilityValue;
+        return liabilityValue;
     }
 
     public void setLiabilityValue(double liabilityValue) {
-        LiabilityValue = liabilityValue;
+        this.liabilityValue = liabilityValue;
     }
 
     public double getAnnualInterestRate() {
