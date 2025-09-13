@@ -89,37 +89,6 @@ public class AppController {
         return new ResponseEntity<>("Bond Purchased. \nLiability Id : " + liabilities.getLiabilityId(),HttpStatus.OK);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @PatchMapping("/depositCash")
     public ResponseEntity<String> depositCash(@RequestParam("liabilityId") int liabilityId, @RequestParam("amount") Double amount) {
 
@@ -162,5 +131,51 @@ public class AppController {
         }
 
         return new ResponseEntity<>("Unknown Error",HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @PostMapping("/sellBond")
+    public ResponseEntity<String> sellBond(@RequestParam("customerId") int customerId, @RequestParam("liabilityId") int liabilityId) {
+        CustomerDto customerDto = new CustomerDto();
+        customerDto.setId(customerId);
+
+        if(!appService.customerExistenceValidation(customerDto))
+        {
+            return new ResponseEntity<>("Customer does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!appService.liabilityExistenceValidation(liabilityId))
+        {
+            return new ResponseEntity<>("Liability Id does not exist", HttpStatus.NOT_FOUND);
+        }
+
+        if(!appService.customerLiabilityExistenceValidation(customerId,liabilityId))
+        {
+            return  new ResponseEntity<>("liability ID Mismatch : Does Not Have Required Permissions", HttpStatus.BAD_REQUEST);
+        }
+
+        if(!appService.liabilityIsBondCheck(liabilityId))
+        {
+            return new ResponseEntity<>("liability ID Not of a Bond.", HttpStatus.BAD_REQUEST);
+        }
+
+        if(appService.liabilityMaturityValidation(liabilityId).equals("false"))
+        {
+            return new ResponseEntity<>("Liability Maturity Validation Failed",HttpStatus.BAD_REQUEST);
+        }
+        else if(appService.liabilityMaturityValidation(liabilityId).equals("true"))
+        {
+            if(appService.sellBond(liabilityId))
+            {
+                return new ResponseEntity<>("Bond Sold",HttpStatus.OK);
+            }
+            else{
+                return  new ResponseEntity<>("Unknown Error",HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+        }
+
+        return  new ResponseEntity<>("Unknown Error",HttpStatus.INTERNAL_SERVER_ERROR);
+
+
     }
 }

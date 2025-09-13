@@ -7,6 +7,8 @@ import com.example.demo.DTO.LiabilitiesCreationDto;
 import com.example.demo.entity.BankAssets;
 import com.example.demo.entity.Customer;
 import com.example.demo.entity.Liabilities;
+import com.example.demo.enums.LiabilityType;
+import com.example.demo.exception.InsufficientFundsException;
 import com.example.demo.mapper.CustomerMapper;
 import com.example.demo.mapper.LiabilitiesMapper;
 import com.example.demo.repository.BankAssetsRepository;
@@ -59,6 +61,43 @@ public class AppServiceImpl implements AppService {
         }
         return result;
     }
+
+    public boolean customerLiabilityExistenceValidation(int customerId , int liabilityId) {
+        boolean result = false;
+        if(liabilitiesRepository.findById(liabilityId).get().getCustomerId() == customerId)
+        {
+            result = true;
+        }
+        return result;
+    }
+
+    public boolean liabilityIsBondCheck(int liabilityId)
+    {
+        boolean result = false;
+        if(liabilitiesRepository.findById(liabilityId).get().getLiabilityType() == LiabilityType.bond)
+        {
+            result = true;
+        }
+        return result;
+    }
+
+    public String liabilityMaturityValidation(int liabilityId) {
+
+        LocalDate maturityDate = liabilitiesRepository.findById(liabilityId).get().getMaturityDate();
+        if(maturityDate == null)
+        {
+            return "null";
+        }
+        else if(maturityDate.isBefore(LocalDate.now()))
+        {
+            return "true";
+        }
+        else{
+            return "false";
+        }
+    }
+
+
 
     public boolean cashDepositExistenceValidation(CustomerDto customerDto,LiabilitiesCreationDto liabilitiesCreationDto) {
         Liabilities liabilities = LiabilitiesMapper.toLiabilities(liabilitiesCreationDto);
@@ -114,6 +153,36 @@ public class AppServiceImpl implements AppService {
         return savedLiabilities;
     }
 
+    public void bankAssetReduction(BankAssets bankAsset ,double amount) throws Exception
+    {
+        if(amount > bankAsset.getCashValue())
+        {
+            throw new InsufficientFundsException("Insufficient BankAssets : Bank is Insolvent.");
+        }
+        else{
+            bankAsset.setCashValue(bankAsset.getCashValue() - amount);
+            bankAsset.setLastUpdate(LocalDate.now());
+            bankAssetsRepository.save(bankAsset);
+        }
+    }
+
+    public boolean sellBond(int liabilityId)
+    {
+        try{
+            Liabilities bond = liabilitiesRepository.findById(liabilityId).get();
+            BankAssets bankAssets = bankAssetsRepository.getReferenceById(BANK_ASSET_ID);
+            bankAssetReduction(bankAssets,bond.getLiabilityValue());
+            liabilitiesRepository.deleteById(liabilityId);
+        }catch(Exception e){
+            System.out.println("-----------------------------------STACK TRACE START----------------------------------------");
+            System.out.println(e.getMessage());
+            System.out.println("-----------------------------------STACK TRACE END------------------------------------------");
+            System.out.println("ERROR MESSAGE : Bond : BankAssets : threw an exception");
+            return false;
+        }
+        return true;
+    }
+
     public boolean cashDeposit(int liabilityId , double amount) {
         boolean result = true;
         Liabilities liabilities;
@@ -162,9 +231,7 @@ public class AppServiceImpl implements AppService {
                 liabilitiesRepository.save(liabilities);
 
                 System.out.println("Banks Assets Value : " +  bankAssets.getCashValue());
-                bankAssets.setCashValue(bankAssets.getCashValue() - amount);
-                bankAssets.setLastUpdate(LocalDate.now());
-                bankAssetsRepository.save(bankAssets);
+                bankAssetReduction(bankAssets,amount);
                 return "Success";
             }
         }catch (Exception e){

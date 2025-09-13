@@ -11,4 +11,6 @@ public interface LiabilitiesRepository extends JpaRepository<Liabilities,Integer
 
     @Query(value = "SELECT a from Liabilities a WHERE a.customerId = :customerId and a.liabilityType = :liabilityType")
     List<Liabilities> findByCustomerIdAndLiabilityType(int customerId, LiabilityType liabilityType);
+
+    
 }
